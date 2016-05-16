@@ -1,25 +1,45 @@
-/**
- * @class VinylRW
- */
 'use strict';
 
-var fs = require('fs-promise');
-var path = require('path');
-
 var File = require('vinyl');
+var fs = require('fs-promise');
 var isBuffer = require('vinyl/lib/isBuffer');
 var isNull = require('vinyl/lib/isNull');
 var isStream = require('vinyl/lib/isStream');
+var path = require('path');
+
+var ENCODING = 'utf8';
+var INSPECT_LENGTH = 40;
+var PATH_ERROR = 'No path specified! Can not interact with file system.';
+var TYPE_ERROR = 'File.contents can only be a String, a Buffer, a Stream, or null.';
 
 function isString(val) {
 	return typeof val === 'string';
 }
 
-/**
- * @constructor
- * @param {String|Options} options
- * @param {String|Buffer|Stream} contents
- */
+function prepareForFS(file, options) {
+	if (!file.path) {
+		throw new Error(PATH_ERROR);
+	}
+
+	if (!options || typeof options !== 'object') {
+		options = { encoding: options };
+	}
+
+	if (options.encoding === undefined) {
+		options.encoding = ENCODING;
+	}
+
+	var cwd = options.cwd || file.cwd;
+	var base = options.base || file.base;
+	var filepath = path.resolve(cwd, base, file.relative);
+
+	file.cwd = cwd;
+	file.base = base;
+	file.path = filepath;
+
+	return options;
+}
+
 function VinylRW(options, contents) {
 	if (typeof options === 'string') {
 		options = { path: options };
@@ -31,105 +51,112 @@ function VinylRW(options, contents) {
 		this.contents = contents;
 	}
 
-	/**
-	 * @property {Boolean} _isRW
-	 */
 	this._isRW = true;
 }
 
 var base = File.prototype;
 var proto = VinylRW.prototype = Object.create(base);
 
-/**
- * @method isString
- * @return {Boolean}
- */
-proto.isString = function() {
+proto.constructor = VinylRW;
+
+proto.isString = function () {
 	return isString(this.contents);
 };
 
-/**
- * @method read
- * @param {String|Options} options
- * @return {Promise<VinylRW>}
- */
-proto.read = function(options) {
-	if (options === undefined) {
-		options = 'utf8';
+proto.inspect = function () {
+	var formatted = base.inspect.call(this);
+
+	if (!this.isString()) {
+		return formatted;
 	}
 
-	var filepath = path.resolve(this.cwd, this.base, this.relative);
+	var contents = this.contents;
 
-	function setContents (contents) {
+	// Wrap with quotes and escape special chars
+	contents = JSON.stringify(contents);
+
+	if (contents.length > INSPECT_LENGTH) {
+		contents = contents.slice(0, INSPECT_LENGTH - 3) + '..."';
+	}
+
+	return formatted.slice(0, -1) + ' ' + contents + '>';
+}
+
+proto.read = function (options) {
+	options = prepareForFS(this, options);
+
+	function success(contents) {
 		this.contents = contents;
+
+		return this;
 	}
 
 	return fs
-		.readFile(filepath, options)
-		.then(setContents.bind(this))
-		.then(this);
+		.readFile(this.path, options)
+		.then(success.bind(this));
 };
 
-/**
- * @method readSync
- * @param {String|Options} options
- * @chainable
- */
-proto.readSync = function(options) {
-	if (options === undefined) {
-		options = 'utf8';
-	}
+proto.readSync = function (options) {
+	options = prepareForFS(this, options);
 
-	var filepath = path.resolve(this.cwd, this.base, this.relative);
-
-	this.contents = fs.readFileSync(filepath, options);
+	this.contents = fs.readFileSync(this.path, options);
 
 	return this;
 };
 
-/**
- * @method write
- * @param {String|Options} options
- * @return {Promise<VinylRW>}
- */
-proto.write = function(options) {
-	var filepath = path.resolve(this.cwd, this.base, this.relative);
+proto.exists = function () {
+	prepareForFS(this);
 
 	return fs
-		.outputFile(filepath, this.contents, options)
-		.then(this);
+		.stat(this.path)
+		.then(function () { return true; })
+		.catch(function () { return false; });
 };
 
-/**
- * @method write
- * @param {String|Options} options
- * @chainable
- */
-proto.writeSync = function(options) {
-	var filepath = path.resolve(this.cwd, this.base, this.relative);
+proto.existsSync = function () {
+	prepareForFS(this);
 
-	fs.outputFileSync(filepath, this.contents, options);
+	try {
+		fs.statSync(this.path);
+
+		return true;
+	}
+	catch (e) {
+		return false;
+	}
+};
+
+proto.write = function (options) {
+	options = prepareForFS(this, options);
+
+	function success(contents) {
+		return this;
+	}
+
+	return fs
+		.outputFile(this.path, this.contents, options)
+		.then(success.bind(this));
+};
+
+proto.writeSync = function (options) {
+	options = prepareForFS(this, options);
+
+	fs.outputFileSync(this.path, this.contents, options);
 
 	return this;
 };
 
-/**
- * @method isVinylRW
- * @param {Object} file
- * @return {Boolean}
- * @static
- */
 VinylRW.isRW = function (file) {
 	return Boolean(file && file._isRW);
 };
 
 Object.defineProperty(proto, 'contents', {
-	get: function() {
+	get: function () {
 		return this._contents;
 	},
-	set: function(val) {
+	set: function (val) {
 		if (!isString(val) && !isBuffer(val) && !isStream(val) && !isNull(val)) {
-			throw new Error('File.contents can only be a String, a Buffer, a Stream, or null.');
+			throw new Error(TYPE_ERROR);
 		}
 
 		this._contents = val;
