@@ -1,0 +1,23 @@
+{
+  "name": "vinyl-rw",
+  "version": "1.0.0",
+  "description": "A file-system aware vinyl file with first-class string support.",
+  "main": "index.js",
+  "scripts": {
+    "cover": "nyc npm test",
+    "test": "es ./node_modules/.bin/tape 'test/*.js' | tap-difflet"
+  },
+  "dependencies": {
+    "fs-promise": "^0.5.0",
+    "vinyl": "^1.1.1"
+  },
+  "devDependencies": {
+    "blue-tape": "^0.2.0",
+    "esprev": "^1.1.0",
+    "nyc": "^6.4.4",
+    "tap-difflet": "^0.4.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
