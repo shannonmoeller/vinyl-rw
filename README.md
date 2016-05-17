@@ -12,9 +12,51 @@ A file-system aware vinyl file with first-class string support.
 
 ```js
 import File from 'vinyl-rw';
+
+const foo = new File('foo.txt', 'Lorem ipsum dolor.');
+
+console.log(foo.path);
+// -> '/Users/smoeller/repos/vinyl-rw/foo.txt'
+
+console.log(foo.contents);
+// -> 'Lorem ipsum dolor.'
 ```
 
 ## API
+
+# new File(options, contents)
+
+- `options` `{String|Object}` - Path or options.
+- `contents` `{String|Buffer|Stream}` - (default: `null`) File contents.
+
+# isString() : Boolean
+
+Returns `true` if `file.contents` is a string.
+
+# exists() : Promise<Boolean>
+# existsSync() : Boolean
+
+Checks whether the file at `file.path` exists.
+
+# read([options]) : Promise<File>
+# readSync([options]) : File
+
+- `options` `{String|Object}` - (default: `'utf8'`) Encoding or options.
+
+Reads the contents of `file.path` into `file.contents`.
+
+# write([options]) : Promise<File>
+# writeSync([options]) : File
+
+- `options` `{String|Object}` - (default: `'utf8'`) Encoding or options.
+
+Writes `file.contents` as the contents of `file.path`.
+
+# File.isRW(val) : Boolean
+
+- `val` `{Any}` - An object to inspect.
+
+Returns `true` if `val` is a VinylRW file.
 
 ## Contribute
 

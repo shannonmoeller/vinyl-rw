@@ -9,8 +9,8 @@ test('should construct a file', async t => {
 	t.equal(file.cwd, __dirname);
 	t.equal(file.base, __dirname);
 	t.equal(file.path, undefined);
-	t.deepEqual(file.history, []);
 	t.equal(file.contents, null);
+	t.deepEqual(file.history, []);
 });
 
 test('should construct a file with a path', async t => {
@@ -21,8 +21,8 @@ test('should construct a file with a path', async t => {
 	t.equal(file.cwd, __dirname);
 	t.equal(file.base, __dirname);
 	t.equal(file.path, 'fixtures/foo.js');
-	t.deepEqual(file.history, ['fixtures/foo.js']);
 	t.equal(file.contents, null);
+	t.deepEqual(file.history, ['fixtures/foo.js']);
 });
 
 test('should construct a file with contents', async t => {
@@ -33,6 +33,6 @@ test('should construct a file with contents', async t => {
 	t.equal(file.cwd, __dirname);
 	t.equal(file.base, __dirname);
 	t.equal(file.path, 'fixtures/foo.js');
-	t.deepEqual(file.history, ['fixtures/foo.js']);
 	t.equal(file.contents, 'bar');
+	t.deepEqual(file.history, ['fixtures/foo.js']);
 });

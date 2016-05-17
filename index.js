@@ -82,28 +82,6 @@ proto.inspect = function () {
 	return formatted.slice(0, -1) + ' ' + contents + '>';
 }
 
-proto.read = function (options) {
-	options = prepareForFS(this, options);
-
-	function success(contents) {
-		this.contents = contents;
-
-		return this;
-	}
-
-	return fs
-		.readFile(this.path, options)
-		.then(success.bind(this));
-};
-
-proto.readSync = function (options) {
-	options = prepareForFS(this, options);
-
-	this.contents = fs.readFileSync(this.path, options);
-
-	return this;
-};
-
 proto.exists = function () {
 	prepareForFS(this);
 
@@ -124,6 +102,28 @@ proto.existsSync = function () {
 	catch (e) {
 		return false;
 	}
+};
+
+proto.read = function (options) {
+	options = prepareForFS(this, options);
+
+	function success(contents) {
+		this.contents = contents;
+
+		return this;
+	}
+
+	return fs
+		.readFile(this.path, options)
+		.then(success.bind(this));
+};
+
+proto.readSync = function (options) {
+	options = prepareForFS(this, options);
+
+	this.contents = fs.readFileSync(this.path, options);
+
+	return this;
 };
 
 proto.write = function (options) {

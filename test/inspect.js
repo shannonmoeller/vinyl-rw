@@ -16,21 +16,21 @@ test('should inspect null', async t => {
 	);
 });
 
-test('should inspect buffers', async t => {
+test('should inspect buffer', async t => {
 	t.equal(
 		new File('foo.txt', new Buffer('buffer')).inspect(),
 		'<File "foo.txt" <Buffer 62 75 66 66 65 72>>'
 	);
 });
 
-test('should inspect streams', async t => {
+test('should inspect stream', async t => {
 	t.equal(
 		new File('foo.txt', new Stream()).inspect(),
 		'<File "foo.txt" <Stream>>'
 	);
 });
 
-test('should inspect strings', async t => {
+test('should inspect string', async t => {
 	t.equal(
 		new File('foo.txt', '').inspect(),
 		'<File "foo.txt" "">'
