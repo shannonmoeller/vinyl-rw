@@ -7,8 +7,8 @@ test('should check file existence', async t => {
 	const foo = new File('fixtures/a.txt');
 	const bar = new File('fixtures/derp.txt');
 
-	t.is(await foo.exists(), true);
-	t.is(await bar.exists(), false);
+	t.equal(await foo.exists(), true);
+	t.equal(await bar.exists(), false);
 });
 
 test('should check file existence sync', async t => {
@@ -17,6 +17,6 @@ test('should check file existence sync', async t => {
 	const foo = new File('fixtures/a.txt');
 	const bar = new File('fixtures/derp.txt');
 
-	t.is(foo.existsSync(), true);
-	t.is(bar.existsSync(), false);
+	t.equal(foo.existsSync(), true);
+	t.equal(bar.existsSync(), false);
 });

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "cover": "nyc npm test",
+    "coveralls": "npm run cover && nyc report -r text-lcov | coveralls",
     "test": "es ./node_modules/.bin/tape 'test/*.js' | tap-difflet"
   },
   "dependencies": {
@@ -13,6 +14,7 @@
   },
   "devDependencies": {
     "blue-tape": "^0.2.0",
+    "coveralls": "^2.11.9",
     "esprev": "^1.1.0",
     "nyc": "^6.4.4",
     "tap-difflet": "^0.4.0"

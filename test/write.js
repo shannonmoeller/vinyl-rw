@@ -11,17 +11,17 @@ test('should write', async t => {
 	const bar = new File('actual/foo/bar.txt', 'bar');
 	const baz = new File('actual/foo/baz.txt', 'baz');
 
-	t.is(await foo.exists(), false);
-	t.is(await bar.exists(), false);
-	t.is(await baz.exists(), false);
+	t.equal(await foo.exists(), false);
+	t.equal(await bar.exists(), false);
+	t.equal(await baz.exists(), false);
 
 	await foo.write();
 	await bar.write();
-	await baz.write();
+	await baz.write('ascii');
 
-	t.is(await fs.readFile(foo.path, 'utf8'), 'foo');
-	t.is(await fs.readFile(bar.path, 'utf8'), 'bar');
-	t.is(await fs.readFile(baz.path, 'utf8'), 'baz');
+	t.equal(await fs.readFile(foo.path, 'utf8'), 'foo');
+	t.equal(await fs.readFile(bar.path, 'utf8'), 'bar');
+	t.equal(await fs.readFile(baz.path, 'utf8'), 'baz');
 });
 
 test('should write sync', async t => {
@@ -33,17 +33,17 @@ test('should write sync', async t => {
 	const bar = new File('actual/foo/bar.txt', 'bar');
 	const baz = new File('actual/foo/baz.txt', 'baz');
 
-	t.is(foo.existsSync(), false);
-	t.is(bar.existsSync(), false);
-	t.is(baz.existsSync(), false);
+	t.equal(foo.existsSync(), false);
+	t.equal(bar.existsSync(), false);
+	t.equal(baz.existsSync(), false);
 
 	foo.writeSync();
 	bar.writeSync();
-	baz.writeSync();
+	baz.writeSync('ascii');
 
-	t.is(fs.readFileSync(foo.path, 'utf8'), 'foo');
-	t.is(fs.readFileSync(bar.path, 'utf8'), 'bar');
-	t.is(fs.readFileSync(baz.path, 'utf8'), 'baz');
+	t.equal(fs.readFileSync(foo.path, 'utf8'), 'foo');
+	t.equal(fs.readFileSync(bar.path, 'utf8'), 'bar');
+	t.equal(fs.readFileSync(baz.path, 'utf8'), 'baz');
 });
 
 test('should refuse to write', async t => {

@@ -7,7 +7,7 @@ var isNull = require('vinyl/lib/isNull');
 var isStream = require('vinyl/lib/isStream');
 var path = require('path');
 
-var ENCODING = 'utf8';
+var DEFAULT_ENCODING = 'utf8';
 var INSPECT_LENGTH = 40;
 var PATH_ERROR = 'No path specified! Can not interact with file system.';
 var TYPE_ERROR = 'File.contents can only be a String, a Buffer, a Stream, or null.';
@@ -26,7 +26,7 @@ function prepareForFS(file, options) {
 	}
 
 	if (options.encoding === undefined) {
-		options.encoding = ENCODING;
+		options.encoding = DEFAULT_ENCODING;
 	}
 
 	var cwd = options.cwd || file.cwd;

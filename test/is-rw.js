@@ -6,7 +6,7 @@ test('should identify rw files', async t => {
 
 	const file = new File();
 
-	t.is(File.isRW(), false);
-	t.is(File.isRW({}), false);
-	t.is(File.isRW(file), true);
+	t.equal(File.isRW(), false);
+	t.equal(File.isRW({}), false);
+	t.equal(File.isRW(file), true);
 });
