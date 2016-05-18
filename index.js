@@ -5,40 +5,12 @@ var fs = require('fs-promise');
 var isBuffer = require('vinyl/lib/isBuffer');
 var isNull = require('vinyl/lib/isNull');
 var isStream = require('vinyl/lib/isStream');
-var path = require('path');
 
-var DEFAULT_ENCODING = 'utf8';
+var isString = require('./lib/isString');
+var normalize = require('./lib/normalize');
+
 var INSPECT_LENGTH = 40;
-var PATH_ERROR = 'No path specified! Can not interact with file system.';
 var TYPE_ERROR = 'File.contents can only be a String, a Buffer, a Stream, or null.';
-
-function isString(val) {
-	return typeof val === 'string';
-}
-
-function prepareForFS(file, options) {
-	if (!file.path) {
-		throw new Error(PATH_ERROR);
-	}
-
-	if (!options || typeof options !== 'object') {
-		options = { encoding: options };
-	}
-
-	if (options.encoding === undefined) {
-		options.encoding = DEFAULT_ENCODING;
-	}
-
-	var cwd = options.cwd || file.cwd;
-	var base = options.base || file.base;
-	var filepath = path.resolve(cwd, base, file.relative);
-
-	file.cwd = cwd;
-	file.base = base;
-	file.path = filepath;
-
-	return options;
-}
 
 function VinylRW(options, contents) {
 	if (typeof options === 'string') {
@@ -83,7 +55,7 @@ proto.inspect = function () {
 }
 
 proto.exists = function () {
-	prepareForFS(this);
+	normalize(this);
 
 	return fs
 		.stat(this.path)
@@ -92,7 +64,7 @@ proto.exists = function () {
 };
 
 proto.existsSync = function () {
-	prepareForFS(this);
+	normalize(this);
 
 	try {
 		fs.statSync(this.path);
@@ -105,7 +77,7 @@ proto.existsSync = function () {
 };
 
 proto.read = function (options) {
-	options = prepareForFS(this, options);
+	options = normalize(this, options);
 
 	function success(contents) {
 		this.contents = contents;
@@ -119,7 +91,7 @@ proto.read = function (options) {
 };
 
 proto.readSync = function (options) {
-	options = prepareForFS(this, options);
+	options = normalize(this, options);
 
 	this.contents = fs.readFileSync(this.path, options);
 
@@ -127,7 +99,7 @@ proto.readSync = function (options) {
 };
 
 proto.write = function (options) {
-	options = prepareForFS(this, options);
+	options = normalize(this, options);
 
 	function success(contents) {
 		return this;
@@ -139,7 +111,7 @@ proto.write = function (options) {
 };
 
 proto.writeSync = function (options) {
-	options = prepareForFS(this, options);
+	options = normalize(this, options);
 
 	fs.outputFileSync(this.path, this.contents, options);
 
