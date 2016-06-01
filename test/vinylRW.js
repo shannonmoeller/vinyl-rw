@@ -6,10 +6,10 @@ test('should construct a file', async t => {
 
 	const file = new File();
 
+	t.equal(file.contents, null);
 	t.equal(file.cwd, __dirname);
 	t.equal(file.base, __dirname);
 	t.equal(file.path, undefined);
-	t.equal(file.contents, null);
 	t.deepEqual(file.history, []);
 });
 
@@ -18,10 +18,10 @@ test('should construct a file with a path', async t => {
 
 	const file = new File('fixtures/foo.js');
 
+	t.equal(file.contents, null);
 	t.equal(file.cwd, __dirname);
 	t.equal(file.base, __dirname);
 	t.equal(file.path, 'fixtures/foo.js');
-	t.equal(file.contents, null);
 	t.deepEqual(file.history, ['fixtures/foo.js']);
 });
 
@@ -30,9 +30,9 @@ test('should construct a file with contents', async t => {
 
 	const file = new File('fixtures/foo.js', 'bar');
 
+	t.equal(file.contents, 'bar');
 	t.equal(file.cwd, __dirname);
 	t.equal(file.base, __dirname);
 	t.equal(file.path, 'fixtures/foo.js');
-	t.equal(file.contents, 'bar');
 	t.deepEqual(file.history, ['fixtures/foo.js']);
 });

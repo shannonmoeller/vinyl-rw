@@ -42,10 +42,7 @@ proto.inspect = function () {
 		return formatted;
 	}
 
-	var contents = this.contents;
-
-	// Wrap with quotes and escape special chars
-	contents = JSON.stringify(contents);
+	var contents = JSON.stringify(this.contents);
 
 	if (contents.length > INSPECT_LENGTH) {
 		contents = contents.slice(0, INSPECT_LENGTH - 3) + '..."';
@@ -101,7 +98,7 @@ proto.readSync = function (options) {
 proto.write = function (options) {
 	options = normalize(this, options);
 
-	function success(contents) {
+	function success() {
 		return this;
 	}
 
@@ -126,6 +123,7 @@ Object.defineProperty(proto, 'contents', {
 	get: function () {
 		return this._contents;
 	},
+
 	set: function (val) {
 		if (!isString(val) && !isBuffer(val) && !isStream(val) && !isNull(val)) {
 			throw new Error(TYPE_ERROR);
