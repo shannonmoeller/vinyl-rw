@@ -4,7 +4,7 @@
   "description": "A file-system aware vinyl file with first-class string support.",
   "license": "MIT",
   "repository": "shannonmoeller/vinyl-rw",
-  "homepage": "https://github.com/shannonmoeller/vinyl-rw",
+  "homepage": "https://github.com/shannonmoeller/vinyl-rw#readme",
   "author": {
     "name": "Shannon Moeller",
     "email": "me@shannonmoeller.com",
@@ -20,12 +20,16 @@
     "vinyl": "^1.1.1"
   },
   "devDependencies": {
-    "whim": "^3.0.0"
+    "blue-tape": "^0.2.0",
+    "coveralls": "^2.11.9",
+    "esprev": "^3.0.0",
+    "nyc": "^6.4.4",
+    "tap-difflet": "^0.4.0"
   },
   "scripts": {
-    "lint": "whim lint",
-    "report": "whim report",
-    "test": "whim test"
+    "coveralls": "nyc report -r text-lcov | coveralls",
+    "test": "nyc -r html -r text npm run test-node",
+    "test-node": "es ./node_modules/.bin/tape 'test/*.js' | tap-difflet"
   },
   "engines": {
     "node": ">= 0.12.0"
