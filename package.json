@@ -1,6 +1,6 @@
 {
   "name": "vinyl-rw",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A file-system aware vinyl file with first-class string support.",
   "license": "MIT",
   "repository": "shannonmoeller/vinyl-rw",
