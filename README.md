@@ -34,19 +34,22 @@ console.log(foo.contents);
 Returns `true` if `file.contents` is a string.
 
 ### exists() : Promise<Boolean>
-### existsSync() : Boolean
+
+Sync: `existsSync() : Boolean`
 
 Checks whether the file at `file.path` exists.
 
 ### read([options]) : Promise<File>
-### readSync([options]) : File
+
+Sync: `readSync([options]) : File`
 
 - `options` `{String|Object}` - (default: `'utf8'`) Encoding or options.
 
 Reads the contents of `file.path` into `file.contents`.
 
 ### write([options]) : Promise<File>
-### writeSync([options]) : File
+
+Sync: `writeSync([options]) : File`
 
 - `options` `{String|Object}` - (default: `'utf8'`) Encoding or options.
 
