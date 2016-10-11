@@ -2,10 +2,10 @@
 
 var File = require('vinyl');
 var fs = require('fs-promise');
-var isBuffer = require('vinyl/lib/isBuffer');
-var isNull = require('vinyl/lib/isNull');
-var isStream = require('vinyl/lib/isStream');
+var isBuffer = require('buffer').Buffer.isBuffer;
+var isStream = require('is-stream');
 
+var isNull = require('./lib/isNull');
 var isString = require('./lib/isString');
 var normalize = require('./lib/normalize');
 
@@ -13,11 +13,13 @@ var INSPECT_LENGTH = 40;
 var TYPE_ERROR = 'File.contents can only be a String, a Buffer, a Stream, or null.';
 
 function VinylRW(options, contents) {
-	if (typeof options === 'string') {
-		options = { path: options };
+	var localOptions = options;
+
+	if (typeof localOptions === 'string') {
+		localOptions = { path: localOptions };
 	}
 
-	File.call(this, options);
+	File.call(this, localOptions);
 
 	if (contents != null) {
 		this.contents = contents;
@@ -51,15 +53,19 @@ proto.inspect = function () {
 	}
 
 	return formatted.slice(0, -1) + ' ' + contents + '>';
-}
+};
 
 proto.exists = function () {
 	normalize(this);
 
 	return fs
 		.stat(this.path)
-		.then(function () { return true; })
-		.catch(function () { return false; });
+		.then(function () {
+			return true;
+		})
+		.catch(function () {
+			return false;
+		});
 };
 
 proto.existsSync = function () {
@@ -76,7 +82,7 @@ proto.existsSync = function () {
 };
 
 proto.read = function (options) {
-	options = normalize(this, options);
+	var localOptions = normalize(this, options);
 
 	function success(contents) {
 		this.contents = contents;
@@ -85,34 +91,34 @@ proto.read = function (options) {
 	}
 
 	return fs
-		.readFile(this.path, options)
+		.readFile(this.path, localOptions)
 		.then(success.bind(this));
 };
 
 proto.readSync = function (options) {
-	options = normalize(this, options);
+	var localOptions = normalize(this, options);
 
-	this.contents = fs.readFileSync(this.path, options);
+	this.contents = fs.readFileSync(this.path, localOptions);
 
 	return this;
 };
 
 proto.write = function (options) {
-	options = normalize(this, options);
+	var localOptions = normalize(this, options);
 
 	function success() {
 		return this;
 	}
 
 	return fs
-		.outputFile(this.path, this.contents, options)
+		.outputFile(this.path, this.contents, localOptions)
 		.then(success.bind(this));
 };
 
 proto.writeSync = function (options) {
-	options = normalize(this, options);
+	var localOptions = normalize(this, options);
 
-	fs.outputFileSync(this.path, this.contents, options);
+	fs.outputFileSync(this.path, this.contents, localOptions);
 
 	return this;
 };

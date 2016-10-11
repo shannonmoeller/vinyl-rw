@@ -2,14 +2,20 @@ import test from 'blue-tape';
 import File from '..';
 import Stream from 'stream';
 
-test('should be picky about type', async t => {
-	t.doesNotThrow(() => new File().contents = null);
-	t.doesNotThrow(() => new File().contents = new Buffer('buffer'));
-	t.doesNotThrow(() => new File().contents = new Stream());
-	t.doesNotThrow(() => new File().contents = 'string');
+function setContents(contents) {
+	const file = new File();
 
-	t.throws(() => new File().contents = function () {}, /File.contents/);
-	t.throws(() => new File().contents = undefined, /File.contents/);
-	t.throws(() => new File().contents = true, /File.contents/);
-	t.throws(() => new File().contents = 42, /File.contents/);
+	file.contents = contents;
+}
+
+test('should be picky about type', async t => {
+	t.doesNotThrow(() => setContents(null));
+	t.doesNotThrow(() => setContents(new Buffer('buffer')));
+	t.doesNotThrow(() => setContents(new Stream()));
+	t.doesNotThrow(() => setContents('string'));
+
+	t.throws(() => setContents(() => null), /File.contents/);
+	t.throws(() => setContents(undefined), /File.contents/);
+	t.throws(() => setContents(true), /File.contents/);
+	t.throws(() => setContents(42), /File.contents/);
 });

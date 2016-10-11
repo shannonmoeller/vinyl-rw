@@ -1,5 +1,4 @@
 import test from 'blue-tape';
-import File from '..';
 import normalize from '../lib/normalize';
 
 test('should require a path', async t => {
@@ -10,7 +9,7 @@ test('should require a path', async t => {
 test('should create options', async t => {
 	const file = {
 		path: __filename,
-		relative: __filename
+		relative: __filename,
 	};
 
 	t.deepEqual(normalize(file), { encoding: 'utf8' });
@@ -21,7 +20,7 @@ test('should create options', async t => {
 test('should create options', async t => {
 	const file = {
 		path: __filename,
-		relative: __filename
+		relative: __filename,
 	};
 
 	t.deepEqual(normalize(file, {}), { encoding: 'utf8' });
