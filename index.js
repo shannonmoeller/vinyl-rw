@@ -26,6 +26,8 @@ function VinylRW(options, contents) {
 	this._isRW = true;
 }
 
+Object.assign(VinylRW, File);
+
 var base = File.prototype;
 var proto = VinylRW.prototype = Object.create(base);
 
