@@ -29,17 +29,17 @@ console.log(foo.contents);
 - `options` `{String|Object}` - Path or options.
 - `contents` `{String|Buffer|Stream}` - (default: `null`) File contents.
 
-### isString() : Boolean
+### .isString() : Boolean
 
 Returns `true` if `file.contents` is a string.
 
-### exists() : Promise<Boolean>
+### .exists() : Promise<Boolean>
 
 Sync: `existsSync() : Boolean`
 
 Checks whether the file at `file.path` exists.
 
-### read([options]) : Promise<File>
+### .read([options]) : Promise<File>
 
 Sync: `readSync([options]) : File`
 
@@ -47,7 +47,7 @@ Sync: `readSync([options]) : File`
 
 Reads the contents of `file.path` into `file.contents`.
 
-### write([options]) : Promise<File>
+### .write([options]) : Promise<File>
 
 Sync: `writeSync([options]) : File`
 
