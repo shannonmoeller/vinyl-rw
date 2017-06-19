@@ -21,8 +21,8 @@ test('should construct a file with a path', t => {
 	t.is(file.contents, null);
 	t.is(file.cwd, __dirname);
 	t.is(file.base, __dirname);
-	t.is(file.path, 'fixtures/foo.js');
-	t.deepEqual(file.history, ['fixtures/foo.js']);
+	t.true(/^fixtures[\\/]foo.js$/.test(file.path));
+	t.true(/^fixtures[\\/]foo.js$/.test(file.history[0]));
 });
 
 test('should construct a file with contents', t => {
@@ -33,6 +33,6 @@ test('should construct a file with contents', t => {
 	t.is(file.contents, 'bar');
 	t.is(file.cwd, __dirname);
 	t.is(file.base, __dirname);
-	t.is(file.path, 'fixtures/foo.js');
-	t.deepEqual(file.history, ['fixtures/foo.js']);
+	t.true(/^fixtures[\\/]foo.js$/.test(file.path));
+	t.true(/^fixtures[\\/]foo.js$/.test(file.history[0]));
 });
