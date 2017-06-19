@@ -2,7 +2,7 @@
 
 [![NPM version][npm-img]][npm-url] [![Downloads][downloads-img]][npm-url] [![Build Status][travis-img]][travis-url] [![Coverage Status][coveralls-img]][coveralls-url] [![Tip][amazon-img]][amazon-url]
 
-A file-system aware vinyl file with first-class string support.
+A [Vinyl](http://npm.im/vinyl) file extension with first-class string support and ability to read and write to the file system.
 
 ## Install
 
