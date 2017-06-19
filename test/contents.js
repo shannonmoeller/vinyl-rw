@@ -1,6 +1,6 @@
-import test from 'blue-tape';
-import File from '..';
 import Stream from 'stream';
+import test from 'ava';
+import File from '..';
 
 function setContents(contents) {
 	const file = new File();
@@ -8,11 +8,11 @@ function setContents(contents) {
 	file.contents = contents;
 }
 
-test('should be picky about type', async t => {
-	t.doesNotThrow(() => setContents(null));
-	t.doesNotThrow(() => setContents(new Buffer('buffer')));
-	t.doesNotThrow(() => setContents(new Stream()));
-	t.doesNotThrow(() => setContents('string'));
+test('should be picky about type', t => {
+	t.notThrows(() => setContents(null));
+	t.notThrows(() => setContents(Buffer.from('buffer')));
+	t.notThrows(() => setContents(new Stream()));
+	t.notThrows(() => setContents('string'));
 
 	t.throws(() => setContents(() => null), /File.contents/);
 	t.throws(() => setContents(undefined), /File.contents/);

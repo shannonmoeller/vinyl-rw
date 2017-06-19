@@ -1,27 +1,27 @@
 'use strict';
 
-var File = require('vinyl');
-var fs = require('fs-promise');
-var isBuffer = require('buffer').Buffer.isBuffer;
-var isStream = require('is-stream');
+const isBuffer = require('buffer').Buffer.isBuffer;
+const fs = require('fs-promise');
+const isStream = require('is-stream');
+const File = require('vinyl');
 
-var isNull = require('./lib/isNull');
-var isString = require('./lib/isString');
-var normalize = require('./lib/normalize');
+const isNull = require('./lib/is-null');
+const isString = require('./lib/is-string');
+const normalize = require('./lib/normalize');
 
-var INSPECT_LENGTH = 40;
-var TYPE_ERROR = 'File.contents can only be a String, a Buffer, a Stream, or null.';
+const INSPECT_LENGTH = 40;
+const TYPE_ERROR = 'File.contents can only be a String, a Buffer, a Stream, or null.';
 
 function VinylRW(options, contents) {
-	var localOptions = options;
+	let localOptions = options;
 
 	if (typeof localOptions === 'string') {
-		localOptions = { path: localOptions };
+		localOptions = {path: localOptions};
 	}
 
 	File.call(this, localOptions);
 
-	if (contents != null) {
+	if (contents !== null && contents !== undefined) {
 		this.contents = contents;
 	}
 
@@ -30,8 +30,10 @@ function VinylRW(options, contents) {
 
 Object.assign(VinylRW, File);
 
-var base = File.prototype;
-var proto = VinylRW.prototype = Object.create(base);
+const base = File.prototype;
+const proto = Object.create(base);
+
+VinylRW.prototype = proto;
 
 proto.constructor = VinylRW;
 
@@ -40,13 +42,13 @@ proto.isString = function () {
 };
 
 proto.inspect = function () {
-	var formatted = base.inspect.call(this);
+	const formatted = base.inspect.call(this);
 
 	if (!this.isString()) {
 		return formatted;
 	}
 
-	var contents = JSON.stringify(this.contents);
+	let contents = JSON.stringify(this.contents);
 
 	if (contents.length > INSPECT_LENGTH) {
 		contents = contents.slice(0, INSPECT_LENGTH - 3) + '..."';
@@ -60,10 +62,10 @@ proto.exists = function () {
 
 	return fs
 		.stat(this.path)
-		.then(function () {
+		.then(() => {
 			return true;
 		})
-		.catch(function () {
+		.catch(() => {
 			return false;
 		});
 };
@@ -75,14 +77,13 @@ proto.existsSync = function () {
 		fs.statSync(this.path);
 
 		return true;
-	}
-	catch (e) {
+	} catch (err) {
 		return false;
 	}
 };
 
 proto.read = function (options) {
-	var localOptions = normalize(this, options);
+	const localOptions = normalize(this, options);
 
 	function success(contents) {
 		this.contents = contents;
@@ -96,7 +97,7 @@ proto.read = function (options) {
 };
 
 proto.readSync = function (options) {
-	var localOptions = normalize(this, options);
+	const localOptions = normalize(this, options);
 
 	this.contents = fs.readFileSync(this.path, localOptions);
 
@@ -104,7 +105,7 @@ proto.readSync = function (options) {
 };
 
 proto.write = function (options) {
-	var localOptions = normalize(this, options);
+	const localOptions = normalize(this, options);
 
 	function success() {
 		return this;
@@ -116,7 +117,7 @@ proto.write = function (options) {
 };
 
 proto.writeSync = function (options) {
-	var localOptions = normalize(this, options);
+	const localOptions = normalize(this, options);
 
 	fs.outputFileSync(this.path, this.contents, localOptions);
 
@@ -128,17 +129,17 @@ VinylRW.isRW = function (file) {
 };
 
 Object.defineProperty(proto, 'contents', {
-	get: function () {
+	get() {
 		return this._contents;
 	},
 
-	set: function (val) {
+	set(val) {
 		if (!isString(val) && !isBuffer(val) && !isStream(val) && !isNull(val)) {
 			throw new Error(TYPE_ERROR);
 		}
 
 		this._contents = val;
-	},
+	}
 });
 
 module.exports = VinylRW;

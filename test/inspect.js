@@ -1,47 +1,47 @@
-import test from 'blue-tape';
-import File from '..';
 import Stream from 'stream';
+import test from 'ava';
+import File from '..';
 
-test('should inspect empty', async t => {
-	t.equal(
+test('should inspect empty', t => {
+	t.is(
 		new File().inspect(),
 		'<File >'
 	);
 });
 
-test('should inspect null', async t => {
-	t.equal(
+test('should inspect null', t => {
+	t.is(
 		new File('foo.txt', null).inspect(),
 		'<File "foo.txt">'
 	);
 });
 
-test('should inspect buffer', async t => {
-	t.equal(
-		new File('foo.txt', new Buffer('buffer')).inspect(),
+test('should inspect buffer', t => {
+	t.is(
+		new File('foo.txt', Buffer.from('buffer')).inspect(),
 		'<File "foo.txt" <Buffer 62 75 66 66 65 72>>'
 	);
 });
 
-test('should inspect stream', async t => {
-	t.equal(
+test('should inspect stream', t => {
+	t.is(
 		new File('foo.txt', new Stream()).inspect(),
 		'<File "foo.txt" <Stream>>'
 	);
 });
 
-test('should inspect string', async t => {
-	t.equal(
+test('should inspect string', t => {
+	t.is(
 		new File('foo.txt', '').inspect(),
 		'<File "foo.txt" "">'
 	);
 
-	t.equal(
+	t.is(
 		new File('foo.txt', 'Lorem ipsum dolor.').inspect(),
 		'<File "foo.txt" "Lorem ipsum dolor.">'
 	);
 
-	t.equal(
+	t.is(
 		new File('foo.txt', 'Lorem ipsum dolor sit\namet, consectetur adipiscing elit.').inspect(),
 		'<File "foo.txt" "Lorem ipsum dolor sit\\namet, consect...">'
 	);

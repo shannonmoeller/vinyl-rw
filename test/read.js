@@ -1,5 +1,5 @@
 import path from 'path';
-import test from 'blue-tape';
+import test from 'ava';
 import File from '..';
 
 test('should read', async t => {
@@ -13,16 +13,16 @@ test('should read', async t => {
 	const bb = await new File('b/b.txt').read('ascii');
 	const c = await new File('c.gif').read(null);
 
-	t.equal(a.contents, 'a\n');
-	t.equal(aa.contents, 'aa\n');
-	t.equal(ab.contents, 'ab\n');
-	t.equal(b.contents, 'b\n');
-	t.equal(ba.contents, 'ba\n');
-	t.equal(bb.contents, 'bb\n');
-	t.equal(c.isBuffer(), true);
+	t.is(a.contents, 'a\n');
+	t.is(aa.contents, 'aa\n');
+	t.is(ab.contents, 'ab\n');
+	t.is(b.contents, 'b\n');
+	t.is(ba.contents, 'ba\n');
+	t.is(bb.contents, 'bb\n');
+	t.is(c.isBuffer(), true);
 });
 
-test('should read sync', async t => {
+test('should read sync', t => {
 	process.chdir(path.join(__dirname, 'fixtures'));
 
 	const a = new File('a.txt').readSync();
@@ -33,19 +33,19 @@ test('should read sync', async t => {
 	const bb = new File('b/b.txt').readSync('ascii');
 	const c = new File('c.gif').readSync(null);
 
-	t.equal(a.contents, 'a\n');
-	t.equal(aa.contents, 'aa\n');
-	t.equal(ab.contents, 'ab\n');
-	t.equal(b.contents, 'b\n');
-	t.equal(ba.contents, 'ba\n');
-	t.equal(bb.contents, 'bb\n');
-	t.equal(c.isBuffer(), true);
+	t.is(a.contents, 'a\n');
+	t.is(aa.contents, 'aa\n');
+	t.is(ab.contents, 'ab\n');
+	t.is(b.contents, 'b\n');
+	t.is(ba.contents, 'ba\n');
+	t.is(bb.contents, 'bb\n');
+	t.is(c.isBuffer(), true);
 });
 
-test('should refuse to read', async t => {
+test('should refuse to read', t => {
 	t.throws(() => new File().read(), /No path specified/);
 });
 
-test('should refuse to read sync', async t => {
+test('should refuse to read sync', t => {
 	t.throws(() => new File().readSync(), /No path specified/);
 });
