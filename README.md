@@ -1,8 +1,12 @@
 # `vinyl-rw`
 
-[![NPM version][npm-img]][npm-url] [![Downloads][downloads-img]][npm-url] [![Build Status][travis-img]][travis-url] [![Coverage Status][coveralls-img]][coveralls-url] [![Tip][amazon-img]][amazon-url]
+[![NPM version][npm-img]][npm-url]
+[![Downloads][downloads-img]][npm-url]
+[![Build Status][travis-img]][travis-url]
+[![Coverage Status][coveralls-img]][coveralls-url]
+[![Tip][amazon-img]][amazon-url]
 
-A [Vinyl](http://npm.im/vinyl) file extension with first-class string support and ability to read and write to the file system.
+An extended [Vinyl](http://npm.im/vinyl) class that defaults to working with strings and has the ability to read and write to the file system.
 
 ## Install
 
@@ -13,13 +17,13 @@ A [Vinyl](http://npm.im/vinyl) file extension with first-class string support an
 ```js
 import File from 'vinyl-rw';
 
-const foo = new File('foo.txt', 'Lorem ipsum dolor.');
+const foo = new File('foo.txt', 'Lorem ipsum.');
 
 console.log(foo.path);
 // -> '/Users/smoeller/repos/vinyl-rw/foo.txt'
 
 console.log(foo.contents);
-// -> 'Lorem ipsum dolor.'
+// -> 'Lorem ipsum.'
 ```
 
 ## API
@@ -39,6 +43,13 @@ Sync: `existsSync() : Boolean`
 
 Checks whether the file at `file.path` exists.
 
+```js
+new File('foo.txt')
+    .exists()
+    .then(x => console.log(x));
+    // -> true
+```
+
 ### .read([options]) : Promise<File>
 
 Sync: `readSync([options]) : File`
@@ -46,6 +57,13 @@ Sync: `readSync([options]) : File`
 - `options` `{String|Object}` - (default: `'utf8'`) Encoding or options.
 
 Reads the contents of `file.path` into `file.contents`.
+
+```js
+new File('foo.txt')
+    .read()
+    .then(x => console.log(x.contents));
+    // -> 'Lorem ipsum.'
+```
 
 ### .write([options]) : Promise<File>
 
@@ -55,11 +73,29 @@ Sync: `writeSync([options]) : File`
 
 Writes `file.contents` as the contents of `file.path`.
 
+```js
+new File('foo.txt', 'Lorem ipsum.')
+    .write()
+    .then(x => console.log(x.path));
+    // -> '/Users/smoeller/repos/vinyl-rw/foo.txt'
+```
+
 ### File.isRW(val) : Boolean
 
 - `val` `{Any}` - An object to inspect.
 
 Returns `true` if `val` is a VinylRW file.
+
+```js
+const vinyl = new Vinyl();
+const file = new File();
+
+console.log(File.isRW(vinyl));
+// -> false
+
+console.log(File.isRW(file));
+// -> true
+```
 
 ## Contribute
 
