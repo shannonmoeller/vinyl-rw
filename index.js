@@ -1,7 +1,7 @@
 'use strict';
 
 const isBuffer = require('buffer').Buffer.isBuffer;
-const fs = require('fs-promise');
+const fs = require('fs-extra');
 const isStream = require('is-stream');
 const File = require('vinyl');
 
