@@ -28,6 +28,8 @@ console.log(foo.contents);
 
 ## API
 
+Extends the [Vinyl API](https://github.com/gulpjs/vinyl-fs#api) with the following:
+
 ### new File(options, contents)
 
 - `options` `{String|Object}` - Path or options.
