@@ -1,6 +1,6 @@
 {
   "name": "vinyl-rw",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "A file-system aware vinyl file with first-class string support.",
   "scripts": {
     "report": "nyc report -r text-lcov | coveralls",
